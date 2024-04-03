@@ -54,19 +54,22 @@ class PaymentAdvice(Document):
 	def set_rdoc_inchild(self):
 		for i in self.get("payment_advice_details"):
 			i.reference_doctype = self.reference_doctype
-  
-	
 
-	# For Payment Entry creation after Saving Payment Advice Document
+
 	@frappe.whitelist()
 	def payment_entry(self):
 		doc = frappe.new_doc("Payment Entry")
-		doc.payment_type = self.payment_type
-		doc.company = self.company	
+		if self.payment_type == "Payment":
+			doc.payment_type = "Pay"
+		elif self.payment_type == "Receive":
+			doc.payment_type = "Receive"
+		elif self.payment_type == "Internal Transfer":
+			doc.payment_type = "Internal Transfer"
+			
+		doc.company = self.company    
 		doc.party_type = self.party_type
 		doc.party = self.party
-		doc.posting_date =self.posting_date
-
+		doc.posting_date = self.posting_date
 		doc.paid_from = self.from_account
 		doc.paid_to = self.to_account
 		doc.paid_from_account_currency = self.paid_from_account_currency
@@ -76,7 +79,7 @@ class PaymentAdvice(Document):
 		doc.base_paid_amount = self.base_paid_amount
 		doc.received_amount_company_currency = self.received_amount_company_currency
 		doc.source_exchange_rate = self.source_exchange_rate
-		doc.target_exchange_rate =self.target_exchange_rate
+		doc.target_exchange_rate = self.target_exchange_rate
 
 		if self.chequereference_no and self.chequereference_date:
 			doc.reference_date = self.chequereference_date
@@ -85,7 +88,7 @@ class PaymentAdvice(Document):
 		for i in self.get("payment_advice_details"):
 			
 			doc.append("references", {
-				"reference_doctype":i.reference_doctype,
+				"reference_doctype": i.reference_doctype,
 				"reference_name": i.document_number,
 				"total_amount": i.grand_total,
 				"outstanding_amount": i.outstanding_amount,
@@ -94,10 +97,4 @@ class PaymentAdvice(Document):
 
 		doc.custom_payment_advice = self.name
 		doc.insert()
-		doc.save()
 		doc.submit()
-
-
-
-
-	
