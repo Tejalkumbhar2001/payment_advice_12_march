@@ -143,7 +143,7 @@
    "fieldname": "payment_type",
    "fieldtype": "Select",
    "label": "Payment Type",
-   "options": "Pay\nReceive\nInternal Transfer",
+   "options": "Payment\nReceive\nInternal Transfer",
    "reqd": 1
   },
   {
@@ -271,7 +271,7 @@
    "link_fieldname": "custom_payment_advice"
   }
  ],
- "modified": "2024-03-07 14:01:31.278579",
+ "modified": "2024-06-01 21:07:56.960042",
  "modified_by": "Administrator",
  "module": "Payment Advice",
  "name": "Payment Advice",
@@ -279,6 +279,7 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -288,6 +289,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

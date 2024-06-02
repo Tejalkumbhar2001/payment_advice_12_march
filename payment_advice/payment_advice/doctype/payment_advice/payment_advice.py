@@ -98,3 +98,11 @@ class PaymentAdvice(Document):
 		doc.custom_payment_advice = self.name
 		doc.insert()
 		doc.submit()
+
+
+	def before_cancel(self):
+		payment_entries = frappe.get_value("Payment Entry", filters={"custom_payment_advice": self.name},fieldname=["name"])
+		if payment_entries:
+			payment_entry = frappe.get_doc("Payment Entry", payment_entries)
+			payment_entry.cancel()
+		
